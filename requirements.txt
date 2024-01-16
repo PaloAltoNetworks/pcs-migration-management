@@ -1,0 +1,14 @@
+altgraph==0.17
+certifi==2021.5.30
+chardet==4.0.0
+charset-normalizer==2.1.1
+idna==2.10
+loguru==0.5.3
+macholib==1.15
+pcpi==0.8.4
+pyinstaller==4.5.1
+pyinstaller-hooks-contrib==2021.3
+PyYAML==6.0.1
+requests==2.25.1
+tqdm==4.62.2
+urllib3==1.26.5
