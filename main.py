@@ -8,9 +8,9 @@ import os
 import yaml
 from sdk import load_config
 from pcpi import session_loader
+import argparse
 
-
-#Build the dictionary used for sync to determin if the module should support the update, add and delete operations
+#Build the dictionary used for sync to determine if the module should support the update, add and delete operations
 def build_module():
     module_dict = {}
     full = input('Do you want to use default operations (Add, Update)? (Y/N): ')
@@ -117,7 +117,7 @@ def load_sync_modes():
 def msg_translate(module):
     msg = ''
     if module =='cloud':
-        msg = 'Cloud Acccounts'
+        msg = 'Cloud Accounts'
     elif module == 'account':
         msg = 'Account Groups'
     elif module == 'resource':
@@ -191,7 +191,7 @@ def build_yaml(file_name, logger):
     print()
     print()
 
-    #Run the script based on user responces to the following prompts
+    #Run the script based on user responses to the following prompts
     mode = input('Do you want to MIGRATE or SYNC? (M/S): ')
     print()
 
@@ -497,7 +497,7 @@ def uuid_main(file_mode, logger):
     for man in session_managers:
         tenant_sessions.append(man.create_cspm_session())
 
-    c_print('Please select the number coresponding with the type of component you want to migrate.')
+    c_print('Please select the number corresponding with the type of component you want to migrate.')
     c_print('1: Cloud Account')
     c_print('2: Account Group')
     c_print('3: Resource List')
@@ -556,13 +556,42 @@ if __name__ =='__main__':
     file_mode = True
     terminal_logging = True
     use_threading = False
-    
-    args = [el.lower() for el in sys.argv]
 
-    if '--file' in args:
+    parser = argparse.ArgumentParser(
+        prog='ProgramName',
+        description='What the program does',
+        epilog=''
+    )
+
+    parser.add_argument(
+        '-f', 
+        '--file', 
+        help='Customize path to the Prisma Cloud credentials file',
+        default=None
+    )
+
+    parser.add(
+        '-q',
+        '--quiet', 
+        help='Reduce logging output to terminal', 
+        action='store_true',
+        default=False
+    )
+
+    parser.add(
+        '-t',
+        '--thread',
+        help='Enable threading on Compliance Migration',
+        action='store_true',
+        default=False
+    )
+
+    args = parser.parse_args()
+    
+    if args.file:
         file_mode = False
 
-    if '-quiet' in args:
+    if args.quiet:
         terminal_logging = False
 
     if '-thread' in args:
@@ -598,7 +627,7 @@ if __name__ =='__main__':
             
             build_yaml(file_to_load, logger)
             if file_mode:
-                tenant_sessions = session_loader.load_config(file_path=supplied_file_name)
+                tenant_sessions = session_loader.load_config(file_path=args.file)
             else:
                 tenant_sessions = session_loader.load_config()
                 
@@ -609,7 +638,11 @@ if __name__ =='__main__':
                 sync_main.sync(tenant_sessions, modes, use_threading, logger)
 
         else:
-            tenant_sessions, mode, modes = load_config.load_yaml(file_to_load, logger)
+            if file_mode:
+                tenant_sessions = session_loader.load_config(file_path=args.file)
+            else:
+                tenant_sessions = session_loader.load_config()
+            mode, modes = load_config.load_yaml(file_to_load, logger)
             if mode=='migrate':
                 migrate_main.migrate(tenant_sessions, modes, use_threading, logger)
             else:
