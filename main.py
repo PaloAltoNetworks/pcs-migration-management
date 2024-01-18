@@ -570,7 +570,7 @@ if __name__ =='__main__':
         default=None
     )
 
-    parser.add(
+    parser.add_argument(
         '-q',
         '--quiet', 
         help='Reduce logging output to terminal', 
@@ -578,7 +578,7 @@ if __name__ =='__main__':
         default=False
     )
 
-    parser.add(
+    parser.add_argument(
         '-t',
         '--thread',
         help='Enable threading on Compliance Migration',
