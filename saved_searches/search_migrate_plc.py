@@ -51,7 +51,8 @@ def perfrom_config(session, search, logger):
     timeRange = search.get('timeRange')
     payload = {
         "query": search['query'],
-        "timeRange": search.get('searchModel',{}).get('timeRange', timeRange)
+        "timeRange": search.get('searchModel',{}).get('timeRange', timeRange),
+        "heuristicSearch": True, "limit": 10, "withResourceJson": True
     }
 
     if 'from iam' in search['query']:
