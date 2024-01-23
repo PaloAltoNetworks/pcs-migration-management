@@ -47,12 +47,11 @@ def run_and_save_search(session, old_search, logger):
 
 #==============================================================================
 
-def perfrom_config(session, search, logger):
+def perform_config(session, search, logger):
     timeRange = search.get('timeRange')
     payload = {
         "query": search['query'],
-        "timeRange": search.get('searchModel',{}).get('timeRange', timeRange),
-        "heuristicSearch": True, "limit": 10, "withResourceJson": True
+        "timeRange": search.get('searchModel',{}).get('timeRange', timeRange)
     }
 
     if 'from iam' in search['query']:
@@ -60,6 +59,7 @@ def perfrom_config(session, search, logger):
         response = session.request("POST", "/api/v1/permission", json=payload)
     else:
         logger.debug('API - Performing config search')
+        payload.update({"heuristicSearch": True, "limit": 100})
         response = session.request("POST", "/search/config", json=payload)
 
     if response.status_code == 200:
