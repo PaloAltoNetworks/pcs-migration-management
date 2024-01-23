@@ -39,7 +39,7 @@ def run_and_save_search(session, old_search, logger):
     #This functions calles the appropriate run RQL API
     #depending on the type of search
     if 'config from' in old_search['query']:
-        return perfrom_config(session, old_search, logger)
+        return perform_config(session, old_search, logger)
     elif 'event from' in old_search['query']:
         return perform_event(session, old_search, logger)
     else: #Network
