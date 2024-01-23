@@ -310,7 +310,7 @@ def build_yaml(file_name, logger):
 #==============================================================================
 
 @logger.catch
-def main(file_mode, use_threading, logger):
+def main(file_path, use_threading, logger):
     print()
     c_print('PRISMA CLOUD TENANT MIGRATION AND CENTRAL MANAGEMENT TOOL', color='blue')
     print()
@@ -318,8 +318,8 @@ def main(file_mode, use_threading, logger):
     #Load JWT sessions from credentials.yaml
     # tenant_sessions, same_stack = load_sessions(file_mode, logger)
     tenant_session_managers = []
-    if file_mode:
-        tenant_session_managers = session_loader.load_config(file_path='tenant_credentials.json',min_tenants=2, logger=logger)
+    if file_path:
+        tenant_session_managers = session_loader.load_config(file_path=file_path,min_tenants=2, logger=logger)
     else:
         tenant_session_managers = session_loader.load_config(min_tenants=2, logger=logger)
     tenant_sessions = []
@@ -553,7 +553,6 @@ def uuid_main(file_mode, logger):
 
 if __name__ =='__main__':
     #Command line arguments
-    file_mode = True
     terminal_logging = True
     use_threading = False
 
@@ -586,15 +585,19 @@ if __name__ =='__main__':
         default=False
     )
 
+    parser.add_argument(
+        '-y',
+        '--yaml',
+        help='Store runtime configurations in a YAML file to run this script as a Cron job',
+        default=None
+    )
+
     args = parser.parse_args()
     
-    if args.file:
-        file_mode = False
-
     if args.quiet:
         terminal_logging = False
 
-    if '-thread' in args:
+    if args.thread:
         use_threading = True
 
     #Configure logging output
@@ -610,10 +613,10 @@ if __name__ =='__main__':
 
 
     #No user interaction mode, only reads from a yaml
-    if '-yaml' in args:
+    if args.yaml:
         file_to_load = ''
         try:
-            file_to_load = args[args.index('-yaml') + 1]
+            file_to_load = args.yaml
         except:
             c_print('No YAML (.yml) input file specified. Exiting...', color='red')
             quit()
@@ -626,23 +629,32 @@ if __name__ =='__main__':
             print()
             
             build_yaml(file_to_load, logger)
-            if file_mode:
-                tenant_sessions = session_loader.load_config(file_path=args.file)
+            if args.file:
+                tenant_sessions_managers = session_loader.load_config(file_path=args.file, logger=logger)
+                tenant_sessions = [manager.create_cspm_session() for manager in tenant_sessions_managers]
             else:
-                tenant_sessions = session_loader.load_config()
+                tenant_sessions_managers = session_loader.load_config(logger=logger)
+                tenant_sessions = [manager.create_cspm_session() for manager in tenant_sessions_managers]
                 
             mode, modes = load_config.load_yaml(file_to_load, logger)
+
             if mode=='migrate':
                 migrate_main.migrate(tenant_sessions, modes, use_threading, logger)
             else:
                 sync_main.sync(tenant_sessions, modes, use_threading, logger)
 
         else:
-            if file_mode:
-                tenant_sessions = session_loader.load_config(file_path=args.file)
+            if args.file:
+                tenant_sessions_managers = session_loader.load_config(file_path=args.file, logger=logger)
+                tenant_sessions = [manager.create_cspm_session() for manager in tenant_sessions_managers]
             else:
-                tenant_sessions = session_loader.load_config()
+                tenant_sessions_managers = session_loader.load_config(logger=logger)
+                tenant_sessions = [manager.create_cspm_session() for manager in tenant_sessions_managers]
+
+                print(len(tenant_sessions))
+
             mode, modes = load_config.load_yaml(file_to_load, logger)
+
             if mode=='migrate':
                 migrate_main.migrate(tenant_sessions, modes, use_threading, logger)
             else:
@@ -654,6 +666,6 @@ if __name__ =='__main__':
 
     #Call main function
 
-    main(file_mode, use_threading, logger)
+    main(args.file, use_threading, logger)
 
     #TODO Maybe run a clean up script and delete credentails files
