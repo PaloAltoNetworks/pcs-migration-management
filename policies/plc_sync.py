@@ -1,5 +1,5 @@
 from sdk import load_config, color_print
-from policies import plc_get, plc_compare, plc_add, plc_update, plc_migrate_default, plc_delete
+from policies import plc_get, plc_compare, plc_add, plc_update, plc_sync_default, plc_delete
 
 def sync(tenant_sessions: list, addMode: bool, upMode: bool, delMode: bool, logger):
     '''
@@ -56,7 +56,7 @@ def sync(tenant_sessions: list, addMode: bool, upMode: bool, delMode: bool, logg
 
     if upMode:
         #Sync default policy
-        updated_default_policies = plc_migrate_default.migrate_builtin_policies(tenant_sessions, logger)
+        updated_default_policies = plc_sync_default.sync_builtin_policies(tenant_sessions, logger)
 
     logger.info('Finished syncing Policies')
 
