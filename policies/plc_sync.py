@@ -54,13 +54,10 @@ def sync(tenant_sessions: list, addMode: bool, upMode: bool, delMode: bool, logg
         for index in tenant_custom_policies[1:]:
             deleted_policies.append(0)
 
-    if upMode:
-        #Sync default policy
-        updated_default_policies = plc_sync_default.sync_builtin_policies(tenant_sessions, logger)
 
     logger.info('Finished syncing Policies')
 
-    return added_policies, updated_policies, deleted_policies, updated_default_policies, {}
+    return added_policies, updated_policies, deleted_policies, {}
 
 if __name__ == '__main__':
     tenant_sessions = load_config.load_config_create_sessions()

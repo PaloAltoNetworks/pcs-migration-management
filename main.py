@@ -132,8 +132,8 @@ def msg_translate(module):
         msg = 'Compliance Data'
     elif module == 'search':
         msg = 'Saved Searches'
-    elif module == 'policy':
-        msg = 'Policies'
+    elif module == 'c_policy':
+        msg = 'Custom Policies'
     elif module == 'd_policy':
         msg = 'Default Policies'
     elif module == 'alert':
@@ -215,7 +215,7 @@ def build_yaml(file_name, logger):
             'ip': {},
             'compliance': {},
             'search': {},
-            'policy': {},
+            'c_policy': {},
             'd_policy': {},
             'alert': {},
             'anomaly': {},
@@ -235,7 +235,7 @@ def build_yaml(file_name, logger):
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'ip')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'compliance')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'search')
-            migrate_modes = get_migrate_mode_settings(migrate_modes, 'policy')
+            migrate_modes = get_migrate_mode_settings(migrate_modes, 'c_policy')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'd_policy')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'alert')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'anomaly')
@@ -262,7 +262,8 @@ def build_yaml(file_name, logger):
             'ip': {},
             'compliance': {},
             'search': {},
-            'policy': {},
+            'c_policy': {},
+            'd_policy': {},
             'alert': {},
             'anomaly': {},
             'settings': {}
@@ -282,7 +283,8 @@ def build_yaml(file_name, logger):
             sync_modes = get_sync_mode_settings(sync_modes, 'ip')
             sync_modes = get_sync_mode_settings(sync_modes, 'compliance')
             sync_modes = get_sync_mode_settings(sync_modes, 'search')
-            sync_modes = get_sync_mode_settings(sync_modes, 'policy')
+            sync_modes = get_sync_mode_settings(sync_modes, 'c_policy')
+            sync_modes = get_sync_mode_settings(sync_modes, 'd_policy')
             sync_modes = get_sync_mode_settings(sync_modes, 'alert')
             sync_modes = get_sync_mode_settings(sync_modes, 'anomaly')
             sync_modes = get_sync_mode_settings(sync_modes, 'settings')
@@ -376,7 +378,7 @@ def main(file_path, use_threading, logger):
             'ip': {},
             'compliance': {},
             'search': {},
-            'policy': {},
+            'c_policy': {},
             'd_policy': {},
             'alert': {},
             'anomaly': {},
@@ -401,7 +403,7 @@ def main(file_path, use_threading, logger):
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'ip')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'compliance')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'search')
-            migrate_modes = get_migrate_mode_settings(migrate_modes, 'policy')
+            migrate_modes = get_migrate_mode_settings(migrate_modes, 'c_policy')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'd_policy')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'alert')
             migrate_modes = get_migrate_mode_settings(migrate_modes, 'anomaly')
@@ -449,7 +451,8 @@ def main(file_path, use_threading, logger):
             'ip': {},
             'compliance': {},
             'search': {},
-            'policy': {},
+            'c_policy': {},
+            'd_policy': {},
             'alert': {},
             'anomaly': {},
             'settings': {}
@@ -473,7 +476,8 @@ def main(file_path, use_threading, logger):
             sync_modes = get_sync_mode_settings(sync_modes, 'ip')
             sync_modes = get_sync_mode_settings(sync_modes, 'compliance')
             sync_modes = get_sync_mode_settings(sync_modes, 'search')
-            sync_modes = get_sync_mode_settings(sync_modes, 'policy')
+            sync_modes = get_sync_mode_settings(sync_modes, 'c_policy')
+            sync_modes = get_sync_mode_settings(sync_modes, 'd_policy')
             sync_modes = get_sync_mode_settings(sync_modes, 'alert')
             sync_modes = get_sync_mode_settings(sync_modes, 'anomaly')
             sync_modes = get_sync_mode_settings(sync_modes, 'settings')

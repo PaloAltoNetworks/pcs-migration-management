@@ -127,7 +127,7 @@ def migrate(tenant_sessions: list, modes: dict, use_threading: bool, logger: obj
         
         #POLICY MIGRATE--------------------------------------------------------
         try:
-            if 'policy' == mode:
+            if 'c_policy' == mode:
                 added = plc_migrate_custom.migrate_custom_policies(tenant_sessions, logger)
                 run_summary.update(added_custom_policies=added)
         except Exception as error:

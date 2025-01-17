@@ -11,7 +11,7 @@ from user_profiles import usr_sync
 from ip_allow_lists import ip_sync
 from compliance_standards import cmp_sync, cmp_sync_thread
 from saved_searches import search_sync
-from policies import plc_sync
+from policies import plc_sync, plc_sync_default
 from alert_rules import alr_sync
 from anomaly_settings import ano_sync
 from enterprise_settings import set_sync
@@ -124,12 +124,20 @@ def sync(tenant_sessions: list, modes: dict, use_threading: bool, logger):
             logger.exception(error)
 
         try:
-            if 'policy' == mode:
-                added, updated, deleted, updated_default, plc_sync_data = plc_sync.sync(tenant_sessions, modes['policy'].get('add', True), modes['policy'].get('update', True), False, logger)
+            if 'c_policy' == mode:
+                added, updated, deleted, plc_sync_data = plc_sync.sync(tenant_sessions, modes['policy'].get('add', True), modes['policy'].get('update', True), False, logger)
                 run_summary.update(added_policies=added)
                 run_summary.update(updated_policies=updated)
-                run_summary.update(updated_default_policies=updated_default)
                 run_summary.update(deleted_policies=deleted)
+        except Exception as error:
+            logger.exception(error)
+
+        #FIXME
+        try:
+            if 'd_policy' == mode:
+                updated_default = plc_sync_default.sync_builtin_policies(tenant_sessions, logger)
+                run_summary.update(updated_default_policies=updated_default)
+
         except Exception as error:
             logger.exception(error)
 
