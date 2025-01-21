@@ -125,7 +125,7 @@ def sync(tenant_sessions: list, modes: dict, use_threading: bool, logger):
 
         try:
             if 'c_policy' == mode:
-                added, updated, deleted, plc_sync_data = plc_sync.sync(tenant_sessions, modes['policy'].get('add', True), modes['policy'].get('update', True), False, logger)
+                added, updated, deleted, plc_sync_data = plc_sync.sync(tenant_sessions, modes['c_policy'].get('add', True), modes['policy'].get('update', True), False, logger)
                 run_summary.update(added_policies=added)
                 run_summary.update(updated_policies=updated)
                 run_summary.update(deleted_policies=deleted)
