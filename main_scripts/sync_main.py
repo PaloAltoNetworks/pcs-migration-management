@@ -192,8 +192,8 @@ def sync(tenant_sessions: list, modes: dict, use_threading: bool, logger):
             logger.exception(error)
         
         try:
-            if 'policy' == mode:
-                if modes['policy'].get('delete', False):
+            if 'c_policy' == mode:
+                if modes['c_policy'].get('delete', False):
                     added, updated, deleted, updated_default, plc_sync_data = plc_sync.sync(tenant_sessions, False, False, True, logger)
                     run_summary.update(deleted_policies=deleted)
         except Exception as error:
